@@ -3,7 +3,7 @@ const coordinates = cell => cell.split('|').map(coordinate => +coordinate)
 
 const willBeAlive = (neighbors, isAlive) => neighbors === 3 || neighbors === 2 && isAlive
 
-const registerCellAsNeighbor = (neighbors, cell) => {
+const toNeighborhood = (neighbors, cell) => {
   const [x, y] = coordinates(cell)
   for (let i = x - 1; i <= x + 1; i++)
     for (let j = y - 1; j <= y + 1; j++)
@@ -30,10 +30,10 @@ export class Life {
   }
 
   tick() {
-    const neighbors = [...this.cells].reduce(registerCellAsNeighbor, {})
-    this.cells = new Set(
-      Object.keys(neighbors).filter(cell => willBeAlive(neighbors[cell], this.cells.has(cell)))
-    )
+    const neighborhood = [...this.cells].reduce(toNeighborhood, {})
+    const cellsInNeighborhood = Object.keys(neighborhood)
+    this.cells = new Set(cellsInNeighborhood.filter(cell => willBeAlive(neighborhood[cell], this.cells.has(cell))))
   }
 }
 
+// TODO: change this.cells from set to neighborhood
