@@ -1,7 +1,7 @@
 const cellAt = (x, y) => `${x}|${y}`
 const coordinates = cell => cell.split('|').map(coordinate => +coordinate)
 
-const willSurvive = (neighbors, isAlive) => neighbors === 3 || neighbors === 2 && isAlive
+const willBeAlive = (neighbors, isAlive) => neighbors === 3 || neighbors === 2 && isAlive
 
 const registerCellAsNeighbor = (neighbors, cell) => {
   const [x, y] = coordinates(cell)
@@ -32,7 +32,7 @@ export class Life {
   tick() {
     const neighbors = [...this.cells].reduce(registerCellAsNeighbor, {})
     this.cells = new Set(
-      Object.keys(neighbors).filter(cell => willSurvive(neighbors[cell], this.cells.has(cell)))
+      Object.keys(neighbors).filter(cell => willBeAlive(neighbors[cell], this.cells.has(cell)))
     )
   }
 }
